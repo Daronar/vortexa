@@ -23,8 +23,8 @@ Storage levels decrease at the loading port, as soon as the cargo movement start
 
 ### Structure:
 Here will be described the structure of project:
- - `src/event_generator/` - this directory contains the abstract class and the realization for event generator from dataframe. I suppose the metrics of ports storages' can be got not only from static files, but also from database or realtime API. So it is enough to write new event generator for such case.
- - `src/event_handlers/` - the main core directory. It contains the class to get events from generator and update the ports' storages' states. Also the special multiprocessing wrapper is available to get events from queue and handle its in parallel with generating process. Such parallelization is not the best practice for real production, but acceptable for the prototyping.
+ - `src/event_generator/` - this directory contains the events generator from dataframe as required by assignment. In the same time based on communication with team I suppose the metrics of ports storages' can be got not only from static files, but also from another sources like databases or realtime API. To adopt code for such cases it is possible to create new events generator inherited from abstract class BaseEventGenerator.
+ - `src/event_handlers/` - the main core directory. It contains the class to get events from some source and update the ports' storages' states. The special multiprocessing wrapper is available to get events from multiprocessing queue and handle them in parallel with events generator process for increasing productivity (simple optimization for production amount of input data). 
  - `src/event_publisher/` - the multiprocessing wrapper for event generators to generate events in parallel with event handler process.
  - `src/events/` - contains types of event and some enums.
  - `src/resources/` - this directory contains the classes for tracking states of ports and its' storages. Also contains the class for port serialization to dataframe.
@@ -40,7 +40,7 @@ There are some settings to set up the application.
  - **MAX_DATETIME** - set the datetime until which the app should be run. By default, *'14/01/2020 00:00:00'*.
  - **PATH_TO_PORTS_FILE** - set the path to init ports' states data file in .parquet format.
  - **PATH_TO_EVENT_FILE** - set the path to file with the information of vessels' operation in .parquet format.
- - **USE_MULTIPROCESSING** - set the setting to use or not to use the multiprocessing in data handling.
+ - **USE_MULTIPROCESSING** - set the setting to use or not to use the multiprocessing in data handling. By default, *True*xk.
  - **PATH_TO_RESULT_FILE** - path to result file, by default, *'./storage_asof_20200114.csv'*.
 
 You can set this ENV variables for running in Docker container using -e options.
